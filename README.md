@@ -1,4 +1,4 @@
-##RESTful сервис для нагрузочного тестирования [CacheApi](https://github.com/rufattabaev/cache-api) с использование инструмента Apache Jmeter.
+#RESTful сервис для нагрузочного тестирования [CacheApi](https://github.com/rufattabaev/cache-api) с использование инструмента Apache Jmeter.
 
 Условия тестирования:
 - общее количество имитируемых пользователей 600, разбитые на 3 Thread Group;
