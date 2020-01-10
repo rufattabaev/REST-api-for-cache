@@ -17,7 +17,7 @@ public class CacheService {
     @Produces("application/json")
     public String doPut(@QueryParam("key") int key,
                         @QueryParam("value") int value) throws JsonProcessingException {
-        cache.put(key, value, 5000);
+        cache.put(key, value);
         HashMap<Integer, Integer> tmp = new HashMap<>();
         tmp.put(key, value);
         return new ObjectMapper().writeValueAsString(tmp);
