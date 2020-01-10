@@ -1,16 +1,18 @@
 package ru.tri;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.ws.rs.*;
-import java.util.HashMap;
 import java.util.Map;
 
 @Path("/")
 public class CacheService {
 
-    private static Cache cache = new CacheImpl(100);
+    private static CacheImpl cache = new CacheImpl(100);
+    private ObjectMapper mapper = new ObjectMapper();
 
     @POST
     @Path("/cache/put")
@@ -18,9 +20,8 @@ public class CacheService {
     public String doPut(@QueryParam("key") int key,
                         @QueryParam("value") int value) throws JsonProcessingException {
         cache.put(key, value);
-        HashMap<Integer, Integer> tmp = new HashMap<>();
-        tmp.put(key, value);
-        return new ObjectMapper().writeValueAsString(tmp);
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        return mapper.writeValueAsString(cache.getCache());
     }
 
     @GET
@@ -28,7 +29,8 @@ public class CacheService {
     @Produces("application/json")
     public String getValue(@QueryParam("key") int key) throws JsonProcessingException {
         Object value = cache.get(key);
-        return new ObjectMapper().writeValueAsString(value);
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        return mapper.writeValueAsString(value);
     }
 
     @GET
@@ -36,7 +38,8 @@ public class CacheService {
     @Produces("application/json")
     public String getAll() throws JsonProcessingException {
         Map cacheAll = cache.getAll(cache.getKeys());
-        return new ObjectMapper().writeValueAsString(cacheAll);
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        return mapper.writeValueAsString(cacheAll);
     }
 
     @POST
@@ -45,6 +48,7 @@ public class CacheService {
     public String clearCache() throws JsonProcessingException {
         cache.clear();
         int size = cache.size();
-        return new ObjectMapper().writeValueAsString(size);
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        return mapper.writeValueAsString(size);
     }
 }
